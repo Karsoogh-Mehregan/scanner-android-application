@@ -6,6 +6,7 @@ import Footstep from './screens/Footstep';
 import QRCodeReader from './components/QRCodeReader';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
