@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mehregan-test",
-    "slug": "mehregan-test",
+    "name": "M-S-M-Test",
+    "slug": "M-S-M-Test",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,10 +21,28 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.atid1234.MSMTest"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Karsoogh Mehregan App to access your camera."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "1005b462-cadb-439f-b2ea-32588ada75c8"
+      }
     }
   }
 }
