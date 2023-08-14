@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Text, View, StyleSheet, Button, Image, Platform, KeyboardAvoidingView } from "react-native";
+import { Text, View, StyleSheet, Image, Platform, KeyboardAvoidingView } from "react-native";
 import { Camera, FlashMode } from "expo-camera";
 import { Dimensions } from "react-native";
 import CustomButton from "./Button/CustomButton";
 import { useFonts } from 'expo-font';
 import { useRoute } from "@react-navigation/native";
-import CustomTextInput from "./TextInput/TextInput";
 import { useHeaderHeight } from '@react-navigation/elements'
+import Reception from "./Reception";
+import SetScore from "./SetScore";
+import ActionSet from "./ActionSet";
 
 
-export default  function QRCodeReader() {
+export default  function QRCodeReader({ action, selectedItemData }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [userText, setUserText] = useState(null);
@@ -57,9 +59,13 @@ export default  function QRCodeReader() {
   }, []);
 
   const handleBarCodeScanned = ({ data }) => {
+    console.log(data);
+    // replace ' with "
+    data = data.replace(/'/g, '"');
+    console.log(data);
     setScanned(true);
     cameraRef.current.pausePreview();
-    setUserText(data.split(','));
+    setUserText((JSON.parse(data)));
   };
 
   if (hasPermission === null) {
@@ -71,7 +77,7 @@ export default  function QRCodeReader() {
 
   return (
     <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={height + 47} behavior="padding">
-      <View style={styles.cameraContainer}>
+      <KeyboardAvoidingView style={styles.cameraContainer}>
         <Camera
           ref={cameraRef}
           flashMode={torchon ? FlashMode.torch : FlashMode.off}
@@ -133,14 +139,17 @@ export default  function QRCodeReader() {
             </View>
           </View>
         </Camera>
-      </View>
-      {scanned ? (
-        <View>
-          <View style={styles.nameContainer}>
+      </KeyboardAvoidingView>
+      {scanned && (
+        <View style={styles.bottomActionContainer}>
+          {action === "reception" && <Reception data={userText} />}
+          {action === "submit_score" && <SetScore data={userText} />}
+          {action === "change_action" && <ActionSet data={userText} selectedItemData={selectedItemData} />}
+          {/* <View style={styles.nameContainer}>
             <Text style={{ fontSize: 20, fontFamily: "Vazir-Regular" }}>
               نام و نام خوانوادگی:
             </Text>
-            <Text style={styles.name}>{userText[0]}</Text>
+            <Text style={styles.name}>{userText}</Text>
           </View>
           <View style={styles.groupBtn}>
             <CustomButton radius={10} color="#7B27FF" font="Vazir-Bold">
@@ -159,17 +168,17 @@ export default  function QRCodeReader() {
             </CustomButton>
           </View>
           <View style={styles.locationContaier}>
-            <Text style={styles.locationText}>{route.params.location}</Text>
-          </View>
+            <Text style={styles.locationText}>{route.params.query}</Text>
+          </View> */}
         </View>
-      ):
-        <View style={styles.InputManualText}>
-          <CustomTextInput font="Vazir-Bold" placeholder="مثلا: عتید خدائی"></CustomTextInput>
-          <View style={{"width":"100%"}}>
-            <CustomButton font="Vazir-Bold" radius={10} color="#7B27FF">دنبالم بگرد!</CustomButton>
-          </View>
-        </View>
-      }
+      // ):
+        // <View style={styles.InputManualText}>
+        //   <CustomTextInput font="Vazir-Bold" placeholder="مثلا: عتید خدائی"></CustomTextInput>
+        //   <View style={{"width":"100%"}}>
+        //     <CustomButton font="Vazir-Bold" radius={10} color="#7B27FF">دنبالم بگرد!</CustomButton>
+        //   </View>
+        // </View>
+      )}
     </KeyboardAvoidingView>
   );
 }
@@ -183,6 +192,10 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     gap: 15,
+  },
+  bottomActionContainer: {
+    flex: 1,
+    width: "100%",
   },
   cameraContainer: {
     width: "100%",
