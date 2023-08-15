@@ -18,7 +18,7 @@ export default function ActionSet({ data, selectedItemData }) {
       try {
         const response = await axios.post("https://karsoogh.at1d.ir/actions/add", {
           mentor: username,
-          nationalID: data.code,
+          nationalID: data.code ? data.code : (1000 + data.id).toString(),
           action: selectedItemData,
         });
         if (

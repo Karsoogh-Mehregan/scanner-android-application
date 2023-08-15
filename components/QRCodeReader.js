@@ -9,7 +9,7 @@ import { useHeaderHeight } from '@react-navigation/elements'
 import Reception from "./Reception";
 import SetScore from "./SetScore";
 import ActionSet from "./ActionSet";
-
+import axios from "axios";
 
 export default  function QRCodeReader({ action, selectedItemData }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -60,9 +60,10 @@ export default  function QRCodeReader({ action, selectedItemData }) {
 
   const handleBarCodeScanned = ({ data }) => {
     data = data.replace(/'/g, '"');
+    data = data.replace(/nan/g, '"NoGroupName"');
     setScanned(true);
     cameraRef.current.pausePreview();
-    setUserText((JSON.parse(data)));
+    setUserText(JSON.parse(data));
   };
 
   if (hasPermission === null) {

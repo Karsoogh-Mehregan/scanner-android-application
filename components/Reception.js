@@ -17,28 +17,47 @@ export default function Reception({ data }) {
   const [buttonText, setButtonText] = useState("Nothing");
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
+  const [group, setGroup] = useState(null);
 
   useEffect(() => {
     if (loading) setButtonText("Waiting");
   }, [loading]);
 
   const registerStudent = async () => {
+    let response = null;
     setLoading(true);
     try {
-      const response = await axios.post(
-        "https://karsoogh.at1d.ir/students/add",
-        {
-          teamName: data.team,
-          fullName: data.fullname,
-          nationalID: data.code,
-          phone: data.phone,
-          gender: "null",
-        }
-      );
+      if (Object.keys(data).length == 2) {
+        // console.log(data);
+        response = await axios.post(
+          "https://karsoogh.at1d.ir/students/add",
+          {
+            teamName: ("Staff-Team-" + data.id).toString(),
+            fullName: data.fullname,
+            nationalID: (1000 + data.id).toString(),
+            phone: "9900784322",
+            gender: "null",
+          }
+        );
+      }
+      else if (Object.keys(data).length == 4) {
+        response = await axios.post(
+          "https://karsoogh.at1d.ir/students/add",
+          {
+            teamName: data.team,
+            fullName: data.fullname,
+            nationalID: data.code,
+            phone: data.phone,
+            gender: "null",
+          }
+        );
+      }
+      
       if (
         response.status == 200 &&
         response.data.status === "student added succusfully"
       ) {
+        setGroup(response.data.group)
         setButtonText("Done");
         setLoading(false);
       }
@@ -79,7 +98,7 @@ export default function Reception({ data }) {
             {buttonText === "Nothing"
               ? "ثبت پذیرش"
               : buttonText === "Done"
-              ? "ثبت شد"
+              ? "ثبت شد" + "، " + group
               : buttonText === "Error"
               ? error
               : "منتظر بمانید"}

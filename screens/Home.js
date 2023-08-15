@@ -22,6 +22,7 @@ export default function Home({ navigation }) {
   const [actions, setActions] = useState([]);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [isLatestVersion, setIsLatestVersion] = useState(true);
+  const [name, setName] = useState("")
 
   useEffect(() => {
     axios.post("https://karsoogh.at1d.ir/actions/get", {}).then((res) => {
@@ -33,8 +34,10 @@ export default function Home({ navigation }) {
   useEffect(() => {
     async function fetchStorageData() {
       const gottenUsername = await AsyncStorage.getItem("username");
+      const gottenName = await AsyncStorage.getItem("name");
       if (gottenUsername) {
         setUsername(gottenUsername);
+        setName(gottenName)
       }
     }
     fetchStorageData();
@@ -71,7 +74,7 @@ export default function Home({ navigation }) {
         <View style={styles.mainSelectTask}>
           {isLatestVersion ? (
             <Text style={styles.WelcomeText}>
-              Hello {Capitalize(username)} :D
+              سلام {name} عزیز :)
             </Text>
           ) : (
             <Text style={[styles.WelcomeText, {"textDecorationLine":"underline"}]}>
