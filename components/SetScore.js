@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import CustomButton from "./Button/CustomButton";
 import ShowName from "./ShowName/ShowName";
@@ -36,7 +36,6 @@ export default function SetScore({ data }) {
           }
         } catch (error) {
           if (error) {
-            console.log(`err: ${error.response}`);
             if (error.response.status >= 400) {
               setButtonText("Error");
               if (error.response.data.status === "student not found") {
@@ -53,9 +52,6 @@ export default function SetScore({ data }) {
     sendData();
   };
 
-  //   useEffect(() => {
-  //     console.log(score);
-  //   }, [score])
   return (
     <>
       <View style={styles.SetScoreContainer}>

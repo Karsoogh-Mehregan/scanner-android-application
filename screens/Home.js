@@ -5,8 +5,9 @@ import { useFonts } from "expo-font";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Capitalize from "../Utilities/Capitalize";
-import { Switch } from "react-native-gesture-handler";
 import axios from "axios";
+import Constants from "expo-constants";
+
 const customFonts = {
   "Vazir-Regular": require("../assets/fonts/Vazirmatn-Regular.ttf"),
   "Vazir-Bold": require("../assets/fonts/Vazirmatn-Bold.ttf"),
@@ -20,6 +21,7 @@ export default function Home({ navigation }) {
   const [isEnabled, setIsEnabled] = useState(false);
   const [actions, setActions] = useState([]);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const [isLatestVersion, setIsLatestVersion] = useState(true);
 
   useEffect(() => {
     axios.post("https://karsoogh.at1d.ir/actions/get", {}).then((res) => {
@@ -36,6 +38,14 @@ export default function Home({ navigation }) {
       }
     }
     fetchStorageData();
+  }, []);
+
+  useEffect(() => {
+    async function getData() {
+      const response = await axios.get("https://karsoogh.at1d.ir/version/get");
+      setIsLatestVersion(response.data.title === Constants.expoConfig.version);
+    }
+    getData();
   }, []);
 
   if (!isLoaded) {
@@ -55,21 +65,31 @@ export default function Home({ navigation }) {
     logout();
   };
 
-  // const countries = ["میدان امام", "استخر پسران", "خوابگاه پسران", "خوابگاه دختران" , "مدرسه اژه‌ای", "مدرسه فرزانگان"]
   return (
     <>
       <View style={styles.container}>
         <View style={styles.mainSelectTask}>
-          <Text style={styles.WelcomeText}>
-            Hello {Capitalize(username)} :D
-          </Text>
+          {isLatestVersion ? (
+            <Text style={styles.WelcomeText}>
+              Hello {Capitalize(username)} :D
+            </Text>
+          ) : (
+            <Text style={[styles.WelcomeText, {"textDecorationLine":"underline"}]}>
+              لطفا برنامه را آپدیت کنید
+            </Text>
+          )}
           <View style={styles.goButton}>
             <CustomButton
-              color="#85BC22"
+              color={isLatestVersion ? "#85BC22" : "gray"}
               radius={10}
               font="Vazir-Bold"
-              onPress={() =>
-                navigation.push("Footstep", { query: "submit_score" })
+              onPress={
+                isLatestVersion
+                  ? () => {
+                      navigation.push("Footstep", { query: "submit_score" });
+                      setShowLocation(false);
+                    }
+                  : () => {}
               }
             >
               ثبت امتیاز
@@ -77,20 +97,22 @@ export default function Home({ navigation }) {
           </View>
           <View style={styles.goButton}>
             <CustomButton
-              color="#456112"
+              color={isLatestVersion ? "#456112" : "gray"}
               radius={10}
               font="Vazir-Bold"
-              onPress={() => {
-                setShowLocation(true);
-              }}
+              onPress={
+                isLatestVersion
+                  ? () => {
+                      setShowLocation(true);
+                    }
+                  : () => {}
+              }
             >
               تغییر محل حضور
             </CustomButton>
           </View>
-          {showSelectLocation && ( <View
-            style={[{ justifyContent: "center" }]}
-          >
-            
+          {showSelectLocation && (
+            <View style={[{ justifyContent: "center" }]}>
               <SelectDropdown
                 buttonStyle={{
                   backgroundColor: "#541BAD",
@@ -112,7 +134,10 @@ export default function Home({ navigation }) {
                 defaultButtonText="برنامه چیه؟"
                 data={actions}
                 onSelect={(selectedItem, index) => {
-                  navigation.push("Footstep", { selectedItemData: selectedItem, query: "change_action" });
+                  navigation.push("Footstep", {
+                    selectedItemData: selectedItem,
+                    query: "change_action",
+                  });
                 }}
                 buttonTextAfterSelection={(selectedItem, index) => {
                   // text represented after item is selected
@@ -125,15 +150,20 @@ export default function Home({ navigation }) {
                   return item;
                 }}
               />
-          </View>
-            )}
+            </View>
+          )}
           <View style={styles.goButton}>
             <CustomButton
-              color="#31450C"
+              color={isLatestVersion ? "#31450C" : "gray"}
               radius={10}
               font="Vazir-Bold"
-              onPress={() =>
-                navigation.navigate("Footstep", { query: "reception" })
+              onPress={
+                isLatestVersion
+                  ? () => {
+                      navigation.navigate("Footstep", { query: "reception" });
+                      setShowLocation(false);
+                    }
+                  : () => {}
               }
             >
               پذیرش دانش‌آموز
@@ -142,7 +172,7 @@ export default function Home({ navigation }) {
           {/* <View style={styles.goButton}>
                         <CustomButton color="#911116" radius={10} font="Vazir-Bold" onPress={logoutHandler}>خروج از حساب</CustomButton>
                     </View> */}
-          <View style={styles.goButton}>
+          {/* <View style={styles.goButton}>
             <Text style={{ fontFamily: "Vazir-Regular" }}>وارد کردن دستی</Text>
             <Switch
               trackColor={{ false: "gray", true: "gray" }}
@@ -151,7 +181,17 @@ export default function Home({ navigation }) {
               onValueChange={toggleSwitch}
               value={isEnabled}
             />
-          </View>
+          </View> */}
+        </View>
+        <View style={styles.BottomContainer}>
+          <CustomButton 
+              color="#852E30"
+              radius={10}
+              font="Vazir-Bold"
+              style={{"marginBottom":20}}
+              onPress={logoutHandler}
+              >خروج از حساب</CustomButton>
+      
         </View>
       </View>
     </>
@@ -165,7 +205,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   mainSelectTask: {
-    flex: 0.5,
+    flex: 0.6,
     width: "100%",
     alignItems: "center",
     justifyContent: "flex-end",
@@ -178,5 +218,10 @@ const styles = StyleSheet.create({
     fontFamily: "Vazir-Bold",
     fontSize: 20,
     // textDecorationLine: "underline",
+  },
+  BottomContainer: {
+    flex: 0.4,
+    justifyContent: "flex-end",
+    width:"70%"
   },
 });

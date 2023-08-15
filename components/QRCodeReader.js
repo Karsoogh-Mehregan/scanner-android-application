@@ -59,10 +59,7 @@ export default  function QRCodeReader({ action, selectedItemData }) {
   }, []);
 
   const handleBarCodeScanned = ({ data }) => {
-    console.log(data);
-    // replace ' with "
     data = data.replace(/'/g, '"');
-    console.log(data);
     setScanned(true);
     cameraRef.current.pausePreview();
     setUserText((JSON.parse(data)));

@@ -6,8 +6,6 @@ import CustomButton from './../components/Button/CustomButton';
 import CustomTextInput from "../components/TextInput/TextInput";
 import { StatusBar } from "expo-status-bar";
 import axios from "axios";
-// import storeData from "../Utilities/storeData";
-// import retriveData from "../Utilities/retriveData";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 

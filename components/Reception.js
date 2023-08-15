@@ -1,11 +1,7 @@
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import {
-  Text,
   View,
   StyleSheet,
-  Image,
-  Platform,
-  KeyboardAvoidingView,
 } from "react-native";
 import CustomButton from "./Button/CustomButton";
 import ShowName from "./ShowName/ShowName";
