@@ -28,7 +28,6 @@ export default function Reception({ data }) {
     setLoading(true);
     try {
       if (Object.keys(data).length == 2) {
-        // console.log(data);
         response = await axios.post(
           "https://karsoogh.at1d.ir/students/add",
           {

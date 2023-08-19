@@ -143,39 +143,7 @@ export default  function QRCodeReader({ action, selectedItemData }) {
           {action === "reception" && <Reception data={userText} />}
           {action === "submit_score" && <SetScore data={userText} />}
           {action === "change_action" && <ActionSet data={userText} selectedItemData={selectedItemData} />}
-          {/* <View style={styles.nameContainer}>
-            <Text style={{ fontSize: 20, fontFamily: "Vazir-Regular" }}>
-              نام و نام خوانوادگی:
-            </Text>
-            <Text style={styles.name}>{userText}</Text>
-          </View>
-          <View style={styles.groupBtn}>
-            <CustomButton radius={10} color="#7B27FF" font="Vazir-Bold">
-              اعلام حضور
-            </CustomButton>
-            <CustomButton radius={10} color="#85BC22" font="Vazir-Bold">
-              ثبت امتیاز
-            </CustomButton>
-          </View>
-          <View style={styles.groupBtn}>
-            <CustomButton radius={10} color="#8A2222" font="Vazir-Bold">
-              اخطار انظباطی
-            </CustomButton>
-            <CustomButton radius={10} color="#85BC22" font="Vazir-Bold">
-              پذیرش
-            </CustomButton>
-          </View>
-          <View style={styles.locationContaier}>
-            <Text style={styles.locationText}>{route.params.query}</Text>
-          </View> */}
         </View>
-      // ):
-        // <View style={styles.InputManualText}>
-        //   <CustomTextInput font="Vazir-Bold" placeholder="مثلا: عتید خدائی"></CustomTextInput>
-        //   <View style={{"width":"100%"}}>
-        //     <CustomButton font="Vazir-Bold" radius={10} color="#7B27FF">دنبالم بگرد!</CustomButton>
-        //   </View>
-        // </View>
       )}
     </KeyboardAvoidingView>
   );

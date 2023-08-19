@@ -4,7 +4,6 @@ import SelectDropdown from "react-native-select-dropdown";
 import { useFonts } from "expo-font";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Capitalize from "../Utilities/Capitalize";
 import axios from "axios";
 import Constants from "expo-constants";
 
@@ -14,13 +13,10 @@ const customFonts = {
 };
 
 export default function Home({ navigation }) {
-  const [location, setLocation] = useState(null);
   const [showSelectLocation, setShowLocation] = useState(false);
   const [isLoaded] = useFonts(customFonts);
-  const [username, setUsername] = useState("heb");
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [_, setUsername] = useState("heb");
   const [actions, setActions] = useState([]);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [isLatestVersion, setIsLatestVersion] = useState(true);
   const [name, setName] = useState("")
 
@@ -143,13 +139,9 @@ export default function Home({ navigation }) {
                   });
                 }}
                 buttonTextAfterSelection={(selectedItem, index) => {
-                  // text represented after item is selected
-                  // if data array is an array of objects then return selectedItem.property to render after item is selected
                   return selectedItem;
                 }}
                 rowTextForSelection={(item, index) => {
-                  // text represented for each item in dropdown
-                  // if data array is an array of objects then return item.property to represent item in dropdown
                   return item;
                 }}
               />
@@ -172,19 +164,6 @@ export default function Home({ navigation }) {
               پذیرش دانش‌آموز
             </CustomButton>
           </View>
-          {/* <View style={styles.goButton}>
-                        <CustomButton color="#911116" radius={10} font="Vazir-Bold" onPress={logoutHandler}>خروج از حساب</CustomButton>
-                    </View> */}
-          {/* <View style={styles.goButton}>
-            <Text style={{ fontFamily: "Vazir-Regular" }}>وارد کردن دستی</Text>
-            <Switch
-              trackColor={{ false: "gray", true: "gray" }}
-              thumbColor={isEnabled ? "black" : "#9C9C9C"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
-          </View> */}
         </View>
         <View style={styles.BottomContainer}>
           <CustomButton 
@@ -220,7 +199,6 @@ const styles = StyleSheet.create({
   WelcomeText: {
     fontFamily: "Vazir-Bold",
     fontSize: 20,
-    // textDecorationLine: "underline",
   },
   BottomContainer: {
     flex: 0.4,
